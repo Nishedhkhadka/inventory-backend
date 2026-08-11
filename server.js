@@ -5,19 +5,19 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import connectDB from "../config/db.js";
+import connectDB from "./config/db.js";
 
-import productRoutes from "../routes/products.js";
-import saleRoutes from "../routes/sales.js";
-import purchaseRoutes from "../routes/purchases.js";
-import analyticsRoutes from "../routes/analytics.js";
-import searchRoutes from "../routes/search.js";
-import importRoutes from "../routes/import.js";
-import pickndropRoutes from "../routes/pickndrop.routes.js";
-import packagingRoutes from "../routes/packaging.routes.js";
-import exportRoutes from "../routes/export.js";
-import authRoutes from "../routes/auth.js";
-import { protect } from "../middleware/auth.js";
+import productRoutes from "./routes/products.js";
+import saleRoutes from "./routes/sales.js";
+import purchaseRoutes from "./routes/purchases.js";
+import analyticsRoutes from "./routes/analytics.js";
+import searchRoutes from "./routes/search.js";
+import importRoutes from "./routes/import.js";
+import pickndropRoutes from "./routes/pickndrop.routes.js";
+import packagingRoutes from "./routes/packaging.routes.js";
+import exportRoutes from "./routes/export.js";
+import authRoutes from "./routes/auth.js";
+import { protect } from "./middleware/auth.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +33,6 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or Postman)
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
@@ -60,8 +59,8 @@ app.use(async (req, res, next) => {
 // Health check endpoint
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-// 3. Safe static uploads serving (checks if directory exists on Vercel)
-const uploadsPath = path.join(__dirname, "../uploads");
+// 3. Safe static uploads serving
+const uploadsPath = path.join(__dirname, "uploads");
 if (fs.existsSync(uploadsPath)) {
   app.use("/uploads", express.static(uploadsPath));
 }
